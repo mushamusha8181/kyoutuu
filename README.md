@@ -10,6 +10,7 @@
 - `docs/DESIGN_SYSTEM.md` — どう見せるか
 - `docs/KENGEN.md` — Androidアプリ開発時の権限設計・実装・確認ルール
 - `docs/VERSIONING.md` — アプリのバージョン表示・命名・更新ルール
+- `templates/README_APP.md` — 各アプリのGitHubトップに置くREADMEテンプレート
 - `templates/CURRENT_SPEC.md` — 各アプリの現在仕様テンプレート
 - `templates/REGRESSION_CHECKLIST.md` — 回帰確認テンプレート
 - `templates/KNOWN_ISSUES.md` — 未解決バグ記録テンプレート
@@ -35,12 +36,35 @@ docs/
 └─ DECISIONS.md        # 必要な場合のみ
 ```
 
+## README の基本方針
+
+各アプリのGitHubリポジトリ直下には `README.md` を必ず用意する。
+
+READMEはGitHubで最初に見る人向けのアプリ説明として、最低限次が分かる状態にする。
+
+- アプリ名
+- アプリの概要
+- 主な機能
+- 対応環境
+- 基本的な使い方
+- 必要な場合は権限・端末設定
+- 現在のアプリバージョン
+
+新規アプリでは `templates/README_APP.md` を土台に、そのアプリの実態に合わせて作成する。
+
+バージョンが `1.00 → 1.01` のように1つでも変わった場合は、メジャー更新かどうかに関係なくREADMEを同じ変更内で必ず見直し、現在バージョン表記を更新する。
+その更新で概要、主要機能、使い方、対応環境、注意点などが変わった場合は、それらも現在状態へ合わせる。
+
+READMEは仕様の正本ではない。アプリ固有の現在仕様は `docs/CURRENT_SPEC.md` を正本とする。
+
 ## 基本方針
 
 - 共通ルールはこのリポジトリを正本にする
 - Androidアプリでは実装前に `docs/KENGEN.md` を確認する
 - 新規アプリ・設定画面・配布版更新では `docs/VERSIONING.md` を確認する
 - 各アプリの設定画面から現在のバージョンを確認できるようにする
+- 各アプリのGitHubリポジトリ直下に `README.md` を用意する
+- バージョン変更時はREADMEも必ず同じ変更内で更新する
 - アプリ固有仕様は各アプリの `docs/CURRENT_SPEC.md` を正本にする
 - 未解決バグをCURRENT_SPECへ混ぜない
 - 仕様変更時はCURRENT_SPECと回帰チェックを同時に見直す
@@ -50,10 +74,12 @@ docs/
 
 ## 新しいアプリを始めるとき
 
-`templates/` の必要なファイルを各アプリの `docs/` へコピーし、そのアプリ固有の内容だけを埋めます。
+まず `templates/README_APP.md` を土台に、リポジトリ直下の `README.md` を作成する。
 
-Androidアプリでは `docs/KENGEN.md` も共通ファイルとして配置します。
+そのうえで、`templates/` の必要な管理ファイルを各アプリの `docs/` へコピーし、そのアプリ固有の内容だけを埋める。
 
-`docs/VERSIONING.md` も共通ルールとして配置し、設定画面のバージョン表示と更新時のバージョン管理に使用します。
+Androidアプリでは `docs/KENGEN.md` も共通ファイルとして配置する。
+
+`docs/VERSIONING.md` も共通ルールとして配置し、設定画面のバージョン表示と更新時のバージョン管理に使用する。
 
 共通ファイルの自動同期は、対象リポジトリと運用方法を確定後にGitHub Actions等で追加します。
