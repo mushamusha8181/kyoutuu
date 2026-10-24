@@ -14,6 +14,7 @@
 - 共通デザイン: `docs/DESIGN_SYSTEM.md`
 - Android権限設計: `docs/KENGEN.md`
 - バージョン表示・更新ルール: `docs/VERSIONING.md`
+- Git並行開発・安全なPush: `docs/GIT_WORKFLOW.md`
 - アプリ固有の現在仕様: 各アプリの `docs/CURRENT_SPEC.md`
 - 回帰確認: 各アプリの `docs/REGRESSION_CHECKLIST.md`
 - 未解決バグ: 各アプリの `docs/KNOWN_ISSUES.md`
@@ -38,6 +39,8 @@
 Androidアプリ開発では、実装前に `docs/KENGEN.md` を確認し、必要権限・要求タイミング・拒否時動作・OS差分を設計してから実装する。
 
 新規アプリ、設定画面の実装、配布版の更新、バージョン変更では `docs/VERSIONING.md` を確認する。設定画面から現在のバージョンを確認できるようにし、通常更新とメジャー更新のルールを守る。
+
+GitHubへのPush、ブランチ作成、並行作業、mainへの統合では `docs/GIT_WORKFLOW.md` を確認する。複数Chat・複数AI・複数開発者が同じリポジトリを触る場合は、原則として作業単位ごとにブランチを分ける。
 
 存在しないファイルがある場合は、必要性を確認し、共通テンプレートから初期化する。
 
@@ -241,6 +244,8 @@ AIの判断だけで次を行わない。
 
 他Chat、他AI、他開発者が入れた変更を勝手にrevert、削除、古い内容で上書きしない。
 
+並行作業時のブランチ運用・Push・競合解決は `docs/GIT_WORKFLOW.md` に従う。強制Pushで他作業を上書きせず、Pushまたはmain統合の直前にリモートの最新状態を再確認する。
+
 ---
 
 ## 14. バグ修正
@@ -346,7 +351,8 @@ READMEは仕様の正本ではない。
 11. `BUG_HISTORY.md` の更新確認
 12. `README.md` の更新確認
 13. 配布版を更新する場合は `VERSIONING.md` に基づくバージョン更新の要否確認
-14. 最終差分確認
+14. Pushまたはmain統合を行う場合は `GIT_WORKFLOW.md` に基づく最新状態・競合・他作業保全の確認
+15. 最終差分確認
 
 検証できなかった項目は明示する。
 
