@@ -13,6 +13,7 @@
 - 開発方法: `AGENTS.md`
 - 共通デザイン: `docs/DESIGN_SYSTEM.md`
 - Android権限設計: `docs/KENGEN.md`
+- バージョン表示・更新ルール: `docs/VERSIONING.md`
 - アプリ固有の現在仕様: 各アプリの `docs/CURRENT_SPEC.md`
 - 回帰確認: 各アプリの `docs/REGRESSION_CHECKLIST.md`
 - 未解決バグ: 各アプリの `docs/KNOWN_ISSUES.md`
@@ -35,6 +36,8 @@
 8. `README.md`
 
 Androidアプリ開発では、実装前に `docs/KENGEN.md` を確認し、必要権限・要求タイミング・拒否時動作・OS差分を設計してから実装する。
+
+新規アプリ、設定画面の実装、配布版の更新、バージョン変更では `docs/VERSIONING.md` を確認する。設定画面から現在のバージョンを確認できるようにし、通常更新とメジャー更新のルールを守る。
 
 存在しないファイルがある場合は、必要性を確認し、共通テンプレートから初期化する。
 
@@ -342,7 +345,8 @@ READMEは仕様の正本ではない。
 10. `KNOWN_ISSUES.md` の更新確認
 11. `BUG_HISTORY.md` の更新確認
 12. `README.md` の更新確認
-13. 最終差分確認
+13. 配布版を更新する場合は `VERSIONING.md` に基づくバージョン更新の要否確認
+14. 最終差分確認
 
 検証できなかった項目は明示する。
 
