@@ -12,6 +12,7 @@
 
 - 開発方法: `AGENTS.md`
 - 共通デザイン: `docs/DESIGN_SYSTEM.md`
+- Android権限設計: `docs/KENGEN.md`
 - アプリ固有の現在仕様: 各アプリの `docs/CURRENT_SPEC.md`
 - 回帰確認: 各アプリの `docs/REGRESSION_CHECKLIST.md`
 - 未解決バグ: 各アプリの `docs/KNOWN_ISSUES.md`
@@ -32,6 +33,8 @@
 6. 必要に応じて `docs/BUG_HISTORY.md`
 7. 必要に応じて `docs/DECISIONS.md`
 8. `README.md`
+
+Androidアプリ開発では、実装前に `docs/KENGEN.md` を確認し、必要権限・要求タイミング・拒否時動作・OS差分を設計してから実装する。
 
 存在しないファイルがある場合は、必要性を確認し、共通テンプレートから初期化する。
 
