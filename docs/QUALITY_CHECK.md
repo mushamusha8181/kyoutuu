@@ -31,10 +31,13 @@ Lint
 ↓
 テスト
 ↓
-regressionCheck（定義されている場合）
+regressionCheck（毎Push向けの軽量タスクとして定義されている場合）
 ↓
 Lintレポート保存
 ```
+
+`regressionCheck` には毎Pushで無理なく実行できる軽量な回帰だけを含める。
+長時間の回帰試験、重いInstrumented / UI test、実機・エミュレータ依存の確認は通常Pushへ詰め込まず、重点検査またはフル品質ゲートへ分離する。
 
 通常Pushだけを理由に、クラッシュ / ANR、メモリ、権限 / セキュリティ、実機確認まで毎回フル実行しない。
 
