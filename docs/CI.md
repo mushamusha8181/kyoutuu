@@ -4,6 +4,9 @@
 
 この文書は、各アプリでGitHub Actionsを常設し、PushやPull Requestのたびに最低限の自動品質確認を行うための共通ルールを定義する。
 
+この文書を、**「Push」という指示にどこまで含めるか、GitHub Actionsをどう実行・確認するかの正本**とする。
+ブランチ・競合・強制Push禁止などのGit操作そのものは `docs/GIT_WORKFLOW.md`、品質確認全体の順序と完成判定は `docs/QUALITY_CHECK.md` を正本とする。
+
 最重要原則：
 
 > 新規Androidアプリでは、主要機能の実装を始める前にCIを用意してGitHubへPushし、以後「Push」はActionsの実行・結果確認までを含む。
@@ -68,16 +71,18 @@ CIは原則として次で実行する。
 
 ## 4. Androidの基本タスク
 
-Androidアプリでは `docs/QUALITY_CHECK.md` の流れと整合するよう、原則として次を自動実行する。
+品質確認全体の順序は `docs/QUALITY_CHECK.md` を正本とする。
+GitHub Actionsでは、そのうち自動化できる基本ゲートとして原則次をこの順序で実行する。
 
 1. `assembleDebug`
 2. `lintDebug`
 3. `testDebugUnitTest`
-4. `regressionCheck` が定義されている場合は `regressionCheck`
+
+加えて、`regressionCheck` が定義されている場合は自動回帰確認として実行する。
 
 `regressionCheck` はAndroid / Gradleの標準タスクではないため、存在しないアプリで無理に実行してCIを壊さない。
 
-アプリ側に回帰用Gradleタスクを用意した場合はCIへ組み込む。
+クラッシュ / ANR、メモリ、権限 / セキュリティ、実機確認など、CIだけで十分に確認できない項目は `docs/QUALITY_CHECK.md` に従って別途確認する。
 
 ---
 
@@ -153,7 +158,7 @@ PushまたはPull Requestを行った場合は、利用可能な範囲でGitHub 
 
 CIが未実行・失敗・確認不能の場合は、その事実を明示する。
 
-CIが成功しても、`docs/QUALITY_CHECK.md` の実機確認など未自動化項目を省略しない。
+CIが成功しても、`docs/QUALITY_CHECK.md` の未自動化項目を省略しない。
 
 ---
 
