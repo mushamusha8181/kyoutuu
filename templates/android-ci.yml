@@ -1,15 +1,15 @@
 name: Android CI
 
+# 無料枠保護: 通常の push / pull_request では自動実行しない。
+# 検査・リリース前確認など、必要なときだけ明示的に手動実行する。
 on:
-  push:
-  pull_request:
   workflow_dispatch:
 
 permissions:
   contents: read
 
 concurrency:
-  group: android-ci-${{ github.workflow }}-${{ github.ref }}
+  group: android-ci-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
@@ -44,9 +44,7 @@ jobs:
         if: ${{ always() }}
         run: ./gradlew testDebugUnitTest
 
-      # regressionCheck は毎Pushで無理なく回せる軽量回帰タスクとして定義する。
-      # 長時間の回帰・実機/エミュレータ依存テストは別タスクや手動Workflowへ分離する。
-      - name: Lightweight regressionCheck when available
+      - name: regressionCheck when available
         if: ${{ always() }}
         shell: bash
         run: |
@@ -62,7 +60,7 @@ jobs:
         with:
           name: lint-reports
           if-no-files-found: warn
-          retention-days: 14
+          retention-days: 7
           path: |
             **/build/reports/lint-results-*.html
             **/build/reports/lint-results-*.xml
