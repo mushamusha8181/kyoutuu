@@ -6,7 +6,7 @@
 
 最重要原則：
 
-> 新規Androidアプリでは、主要機能の実装を始める前にCIを用意する。
+> 新規Androidアプリでは、主要機能の実装を始める前にCIを用意し、最初にGitHubへPushして有効化する。
 
 ローカルで確認し忘れてもGitHub側で異常を検出できる状態を、開発開始時から維持する。
 
@@ -17,6 +17,11 @@
 新しいAndroidアプリのリポジトリを作成したら、主要機能の実装より先に `.github/workflows/android-ci.yml` を配置する。
 
 共通テンプレートは `templates/android-ci.yml` を使用し、対象アプリの構成に合わせて必要最小限だけ調整する。
+
+Workflowをローカルに置くだけで先へ進まず、原則として最初のPushでGitHubへ反映し、Actionsが実際に有効になったことを確認してから主要機能の実装へ進む。
+
+AIがGitHubへPushできる環境では、Actionsの初期配置を先にPushする。
+Push権限・接続・明示的承認などが必要で自動反映できない場合は、主要機能の実装前にユーザーへ「まずGitHub ActionsをPushしてよいか」を確認する。
 
 CIを後付けにしない。
 
@@ -127,11 +132,15 @@ CIが成功しても、`docs/QUALITY_CHECK.md` の実機確認など未自動化
 ↓
 共通ルール配置
 ↓
-GitHub Actions常設
+GitHub Actions配置
+↓
+GitHub Actionsを最初にPush
+↓
+Actionsが有効であることを確認
 ↓
 主要機能の実装開始
 ```
 
 を基本順序とする。
 
-> CIは後から足す保険ではなく、開発開始時から常設する安全網とする。
+> CIは後から足す保険ではなく、開発開始時からGitHub上で稼働させる安全網とする。
