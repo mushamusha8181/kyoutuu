@@ -11,6 +11,7 @@
 - `docs/KENGEN.md` — Androidアプリ開発時の権限設計・実装・確認ルール
 - `docs/VERSIONING.md` — アプリのバージョン表示・命名・更新ルール
 - `docs/GIT_WORKFLOW.md` — 複数Chat・複数AIで並行開発するときのブランチ・Push・統合ルール
+- `docs/QUALITY_CHECK.md` — ビルド後のLint・テスト・実機・クラッシュ・ANR・メモリリーク・依存関係確認などの品質ルール
 - `templates/README_APP.md` — 各アプリのGitHubトップに置くREADMEテンプレート
 - `templates/CURRENT_SPEC.md` — 各アプリの現在仕様テンプレート
 - `templates/REGRESSION_CHECKLIST.md` — 回帰確認テンプレート
@@ -31,6 +32,7 @@ docs/
 ├─ KENGEN.md                   # Androidアプリの場合
 ├─ VERSIONING.md               # 共通バージョン管理ルール
 ├─ GIT_WORKFLOW.md             # 並行開発・安全なPushルール
+├─ QUALITY_CHECK.md            # 品質確認・完成判定ルール
 ├─ CURRENT_SPEC.md
 ├─ REGRESSION_CHECKLIST.md
 ├─ KNOWN_ISSUES.md
@@ -68,6 +70,8 @@ READMEは仕様の正本ではない。アプリ固有の現在仕様は `docs/C
 - 並行作業では原則として各Chat・各作業ごとに専用ブランチを分ける
 - Pushまたはmain統合の直前にリモートの最新状態を再確認する
 - 通常開発では強制Pushで他作業を上書きしない
+- コード変更後の完成判定では `docs/QUALITY_CHECK.md` に従い、ビルド成功だけで完成としない
+- コンパイラ警告、Lint、テスト、回帰、実機確認、クラッシュ、ANR、メモリリーク、依存関係の安全性を変更内容に応じて確認する
 - 各アプリの設定画面から現在のバージョンを確認できるようにする
 - 各アプリのGitHubリポジトリ直下に `README.md` を用意する
 - バージョン変更時はREADMEも必ず同じ変更内で更新する
@@ -89,5 +93,7 @@ Androidアプリでは `docs/KENGEN.md` も共通ファイルとして配置す�
 `docs/VERSIONING.md` も共通ルールとして配置し、設定画面のバージョン表示と更新時のバージョン管理に使用する。
 
 `docs/GIT_WORKFLOW.md` も共通ルールとして配置し、複数Chat・複数AIで作業するときは専用ブランチを作って安全にPush・統合する。
+
+`docs/QUALITY_CHECK.md` も共通ルールとして配置し、ビルド成功後の品質確認と完成判定に使用する。
 
 共通ファイルの自動同期は、対象リポジトリと運用方法を確定後にGitHub Actions等で追加します。
