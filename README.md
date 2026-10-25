@@ -79,10 +79,11 @@ GitHub Actionsが常設されているリポジトリでの「Push」の扱い�
 
 今後は3段階で使い分ける。
 
-- **「Push」「Pushして」** → 安全にPushし、軽量CI（ビルド / Lint / テスト / 定義済みなら回帰タスク / Lintレポート保存）の完了・成否確認まで行う
+- **「Push」「Pushして」** → 安全にPushし、軽量CI（ビルド / Lint / テスト / 毎Push向けの軽量 `regressionCheck` がある場合 / Lintレポート保存）の完了・成否確認まで行う
 - **「検査して」「バグチェックして」「セキュリティチェックして」** → 変更内容と依頼内容に応じた重点検査を追加する
 - **「全部検査して」「フルチェックして」「リリース前チェックして」** → `docs/QUALITY_CHECK.md` のフル品質ゲートを行う
 
+長時間の回帰試験や実機・エミュレータ依存の重い回帰は毎Push用 `regressionCheck` に詰め込まず、重点検査・専用Workflow・手動実行へ分離する。
 通常のPushだけを理由に、クラッシュ / ANR、メモリ、権限 / セキュリティ、実機確認まで毎回フル実行しない。
 
 Push前の最新状態確認、作業ブランチ、競合解決、強制Push禁止などのGit操作は `docs/GIT_WORKFLOW.md` に従う。
@@ -93,7 +94,7 @@ Push前の最新状態確認、作業ブランチ、競合解決、強制Push禁
 - 詳細ルールは役割ごとの専門文書を正本とし、他文書には必要以上に重複記載しない
 - Androidアプリでは実装前に `docs/KENGEN.md` を確認する
 - 新規アプリ・設定画面・配布版更新では `docs/VERSIONING.md` を確認する
-- 新規Androidアプリでは主要機能の実装より先に `templates/android-ci.yml` を `.github/workflows/android-ci.yml` として配置し、最初にGitHubへPushしてActionsを有効化する
+- 新規Androidアプリではビルド可能な最小プロジェクトとGradle Wrapperを用意した直後、主要機能の実装より先に `templates/android-ci.yml` を `.github/workflows/android-ci.yml` として配置し、最初にGitHubへPushしてActionsを有効化する
 - GitHub Actionsが常設されている場合、「Push」の指示は `docs/CI.md` に従って軽量CIの完了・成否確認まで含む
 - 「検査して」では変更内容に応じた重点検査を行う
 - 「全部検査して」「リリース前チェックして」では `docs/QUALITY_CHECK.md` のフル品質ゲートを行う
@@ -122,11 +123,13 @@ Push前の最新状態確認、作業ブランチ、競合解決、強制Push禁
 ↓
 README作成
 ↓
+ビルド可能な最小AndroidプロジェクトとGradle Wrapperを用意
+↓
 GitHub Actions配置
 ↓
 GitHub Actionsを最初にPush
 ↓
-Actionsが有効であることを確認
+Actionsが起動・完了できることを確認
 ↓
 主要機能の実装開始
 ```
