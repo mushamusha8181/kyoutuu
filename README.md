@@ -6,14 +6,14 @@
 
 このリポジトリには、アプリをまたいで共通化する内容だけを置きます。
 
-- `AGENTS.md` — どう開発するか
-- `docs/DESIGN_SYSTEM.md` — どう見せるか
-- `docs/KENGEN.md` — Androidアプリ開発時の権限設計・実装・確認ルール
-- `docs/VERSIONING.md` — アプリのバージョン表示・命名・更新ルール
-- `docs/GIT_WORKFLOW.md` — 複数Chat・複数AIで並行開発するときのブランチ・Push・統合ルール
-- `docs/CI.md` — GitHub Actionsの常設・実行・結果確認ルール
-- `docs/QUALITY_CHECK.md` — ビルド → Lint → テスト → クラッシュ/ANR → メモリ → 権限/セキュリティ → 実機確認の品質ルール
-- `docs/MONITORING.md` — Listener / Observer / MutationObserver等の安全な監視ルール
+- `AGENTS.md` — どう開発するかの共通原則
+- `docs/DESIGN_SYSTEM.md` — 共通デザインの正本
+- `docs/KENGEN.md` — Android権限設計・実装・確認の正本
+- `docs/VERSIONING.md` — バージョン表示・命名・更新の正本
+- `docs/GIT_WORKFLOW.md` — 並行開発・ブランチ・競合・安全なPushの正本
+- `docs/CI.md` — GitHub Actionsの常設と「Push」後のCI実行・結果確認の正本
+- `docs/QUALITY_CHECK.md` — 品質確認の順序・完成判定の正本
+- `docs/MONITORING.md` — Listener / Observer / MutationObserver等の監視ルールの正本
 - `templates/android-ci.yml` — Android用GitHub Actionsテンプレート
 - `templates/README_APP.md` — 各アプリのGitHubトップに置くREADMEテンプレート
 - `templates/CURRENT_SPEC.md` — 各アプリの現在仕様テンプレート
@@ -25,6 +25,8 @@
 ## 正本と各アプリ側の関係
 
 共通ルールの正本はこの `kyoutuu` とする。
+
+同じルールを複数文書へ全文コピーして別々に管理しない。内容が重なる場合は上記の役割ごとの専門文書を正本とし、`AGENTS.md` やREADMEは原則として参照・要約に留める。
 
 各アプリへ共通ファイルの作業用コピーを置く場合も、共通ルール自体を独自改変して別の正本を増やさない。アプリ固有の例外や仕様は各アプリの `docs/CURRENT_SPEC.md` で管理する。
 
@@ -73,38 +75,22 @@ READMEは仕様の正本ではない。アプリ固有の現在仕様は `docs/C
 
 ## Push の基本方針
 
-GitHub Actionsが常設されているリポジトリでは、ユーザーから「Push」「Pushして」「GitHubに反映して」と指示された場合、明示的にPushだけで止める指定がない限り、次を1セットとして扱う。
+GitHub Actionsが常設されているリポジトリでの「Push」の扱いは `docs/CI.md` を正本とする。
+ユーザーから「Push」「Pushして」「GitHubに反映して」と指示された場合は、明示的にPushだけで止める指定がない限り、Push後のActions完了・成否確認と結果報告まで行う。
 
-```text
-最新状態を確認
-↓
-安全にPush
-↓
-GitHub Actionsを実行・起動確認
-↓
-完了まで確認
-↓
-成功 / 失敗 / 未実行を確認
-↓
-結果報告
-```
-
-Actionsを回すためだけに追加確認は求めない。
-Push自体が成功してもActionsが失敗している場合は「完了」「問題なし」と扱わない。
+Push前の最新状態確認、作業ブランチ、競合解決、強制Push禁止などのGit操作は `docs/GIT_WORKFLOW.md` に従う。
 
 ## 基本方針
 
 - 共通ルールはこのリポジトリを正本にする
+- 詳細ルールは役割ごとの専門文書を正本とし、他文書には必要以上に重複記載しない
 - Androidアプリでは実装前に `docs/KENGEN.md` を確認する
 - 新規アプリ・設定画面・配布版更新では `docs/VERSIONING.md` を確認する
 - 新規Androidアプリでは主要機能の実装より先に `templates/android-ci.yml` を `.github/workflows/android-ci.yml` として配置し、最初にGitHubへPushしてActionsを有効化する
-- GitHub Actionsが常設されている場合、「Push」の指示はActionsの完了・成否確認まで含む
+- GitHub Actionsが常設されている場合、「Push」の指示は `docs/CI.md` に従ってActionsの完了・成否確認まで含む
 - 複数Chat・複数AI・複数開発者で並行作業する場合は `docs/GIT_WORKFLOW.md` に従う
-- 並行作業では原則として各Chat・各作業ごとに専用ブランチを分ける
-- Pushまたはデフォルトブランチ統合の直前にリモートの最新状態を再確認する
 - 通常開発では強制Pushで他作業を上書きしない
-- コード変更後の完成判定では `docs/QUALITY_CHECK.md` に従い、ビルド成功だけで完成としない
-- 品質確認の基本順序は「ビルド → Lint → テスト → クラッシュ/ANR → メモリ → 権限/セキュリティ → 実機確認」とする
+- コード変更後の品質確認・完成判定は `docs/QUALITY_CHECK.md` に従う
 - 監視処理は `docs/MONITORING.md` に従い、MutationObserverを一律禁止せず安全条件を守る
 - 各アプリの設定画面から現在のバージョンを確認できるようにする
 - 各アプリのGitHubリポジトリ直下に `README.md` を用意する
