@@ -11,8 +11,8 @@
 - `docs/KENGEN.md` — Android権限設計・実装・確認の正本
 - `docs/VERSIONING.md` — バージョン表示・命名・更新の正本
 - `docs/GIT_WORKFLOW.md` — 並行開発・ブランチ・競合・安全なPushの正本
-- `docs/CI.md` — GitHub Actionsの常設と「Push」後のCI実行・結果確認の正本
-- `docs/QUALITY_CHECK.md` — 品質確認の順序・完成判定の正本
+- `docs/CI.md` — GitHub Actionsの常設と「Push」後の軽量CI・結果確認の正本
+- `docs/QUALITY_CHECK.md` — 重点検査・フル品質ゲート・完成判定の正本
 - `docs/MONITORING.md` — Listener / Observer / MutationObserver等の監視ルールの正本
 - `templates/android-ci.yml` — Android用GitHub Actionsテンプレート
 - `templates/README_APP.md` — 各アプリのGitHubトップに置くREADMEテンプレート
@@ -73,10 +73,17 @@ READMEはGitHubで最初に見る人向けのアプリ説明として、最低�
 
 READMEは仕様の正本ではない。アプリ固有の現在仕様は `docs/CURRENT_SPEC.md` を正本とする。
 
-## Push の基本方針
+## Push・検査の基本方針
 
 GitHub Actionsが常設されているリポジトリでの「Push」の扱いは `docs/CI.md` を正本とする。
-ユーザーから「Push」「Pushして」「GitHubに反映して」と指示された場合は、明示的にPushだけで止める指定がない限り、Push後のActions完了・成否確認と結果報告まで行う。
+
+今後は3段階で使い分ける。
+
+- **「Push」「Pushして」** → 安全にPushし、軽量CI（ビルド / Lint / テスト / 定義済みなら回帰タスク / Lintレポート保存）の完了・成否確認まで行う
+- **「検査して」「バグチェックして」「セキュリティチェックして」** → 変更内容と依頼内容に応じた重点検査を追加する
+- **「全部検査して」「フルチェックして」「リリース前チェックして」** → `docs/QUALITY_CHECK.md` のフル品質ゲートを行う
+
+通常のPushだけを理由に、クラッシュ / ANR、メモリ、権限 / セキュリティ、実機確認まで毎回フル実行しない。
 
 Push前の最新状態確認、作業ブランチ、競合解決、強制Push禁止などのGit操作は `docs/GIT_WORKFLOW.md` に従う。
 
@@ -87,7 +94,9 @@ Push前の最新状態確認、作業ブランチ、競合解決、強制Push禁
 - Androidアプリでは実装前に `docs/KENGEN.md` を確認する
 - 新規アプリ・設定画面・配布版更新では `docs/VERSIONING.md` を確認する
 - 新規Androidアプリでは主要機能の実装より先に `templates/android-ci.yml` を `.github/workflows/android-ci.yml` として配置し、最初にGitHubへPushしてActionsを有効化する
-- GitHub Actionsが常設されている場合、「Push」の指示は `docs/CI.md` に従ってActionsの完了・成否確認まで含む
+- GitHub Actionsが常設されている場合、「Push」の指示は `docs/CI.md` に従って軽量CIの完了・成否確認まで含む
+- 「検査して」では変更内容に応じた重点検査を行う
+- 「全部検査して」「リリース前チェックして」では `docs/QUALITY_CHECK.md` のフル品質ゲートを行う
 - 複数Chat・複数AI・複数開発者で並行作業する場合は `docs/GIT_WORKFLOW.md` に従う
 - 通常開発では強制Pushで他作業を上書きしない
 - コード変更後の品質確認・完成判定は `docs/QUALITY_CHECK.md` に従う
