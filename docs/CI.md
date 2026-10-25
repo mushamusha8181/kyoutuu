@@ -9,7 +9,7 @@
 
 最重要原則：
 
-> 毎回のPushでは軽量CIを自動実行し、重い検査は変更内容または明示的な検査指示に応じて追加する。
+> 毎回のPushでは軽量CIだけを自動実行し、重点検査・重い検査は明示的な検査指示があったときに、変更内容に応じて追加する。
 
 毎Pushでクラッシュ / ANR、メモリ、権限 / セキュリティ、実機確認まで強制しない。
 通常開発の速度を落とさず、必要なときに深く確認できる運用を基本とする。
@@ -18,11 +18,19 @@
 
 ## 1. 新規Androidアプリでは最初にGitHub Actionsを常設する
 
-新しいAndroidアプリのリポジトリを作成したら、主要機能の実装より先に `.github/workflows/android-ci.yml` を配置する。
+新しいAndroidアプリでは、主要機能の実装より先にCIを有効化する。
+
+ただし、CIテンプレートは `./gradlew`、`assembleDebug`、`lintDebug`、`testDebugUnitTest` を実行するため、Workflowを置く前に最低限、次を用意する。
+
+- ビルド可能な最小Androidプロジェクト
+- Gradle Wrapper（`gradlew`、`gradlew.bat`、`gradle/wrapper/`）
+- CIが参照する最低限のGradle設定
+
+そのうえで `.github/workflows/android-ci.yml` を配置する。
 
 共通テンプレートは `templates/android-ci.yml` を使用し、対象アプリの構成に合わせて必要最小限だけ調整する。
 
-Workflowをローカルに置くだけで先へ進まず、原則として最初のPushでGitHubへ反映し、Actionsが実際に有効になったことを確認してから主要機能の実装へ進む。
+Workflowをローカルに置くだけで先へ進まず、原則として最初のPushでGitHubへ反映し、Actionsが実際に起動・完了できることを確認してから主要機能の実装へ進む。
 
 CIを後付けにしない。
 
@@ -55,8 +63,11 @@ Actionsの完了を確認
 1. `assembleDebug`
 2. `lintDebug`
 3. `testDebugUnitTest`
-4. `regressionCheck` が定義されている場合のみ実行
+4. 毎Push向けの軽量タスクとして `regressionCheck` が定義されている場合のみ実行
 5. LintレポートArtifact保存
+
+`regressionCheck` という名前は、毎Pushで回せる軽量な自動回帰タスクに使う。
+長時間かかる回帰試験や実機・エミュレータを必要とする重い回帰は `regressionCheck` に詰め込まず、別タスク名・専用Workflow・`workflow_dispatch` 等へ分離する。
 
 クラッシュ / ANR、メモリ、権限 / セキュリティ、実機確認は、通常のPushだけを理由に毎回フル実行しない。
 
@@ -137,9 +148,10 @@ GitHub Actionsでは、通常Pushの軽量ゲートとして原則次をこの�
 2. `lintDebug`
 3. `testDebugUnitTest`
 
-加えて、`regressionCheck` が定義されている場合は自動回帰確認として実行する。
+加えて、毎Push向けの軽量タスクとして `regressionCheck` が定義されている場合は自動回帰確認として実行する。
 
 `regressionCheck` はAndroid / Gradleの標準タスクではないため、存在しないアプリで無理に実行してCIを壊さない。
+また、存在していても長時間の回帰・実機依存・重いInstrumented Test等を内包する場合は毎Push向けにしない。軽量部分だけを `regressionCheck` とし、重い部分は別タスク・専用Workflow・手動実行へ分離する。
 
 クラッシュ / ANR、メモリ、権限 / セキュリティ、実機確認など、CIだけで十分に確認できない項目は通常Pushへ無理に詰め込まず、重点検査またはフル品質ゲートで確認する。
 
@@ -222,6 +234,7 @@ Workflowが継続的に失敗している状態を通常状態にしない。
 - Gradle / JDK / SDK等の環境差か
 - 既存から継続している失敗か
 - `regressionCheck` 等の独自タスクが存在するか
+- `regressionCheck` が毎Push向けの軽量タスクとして保たれているか
 
 テストやLintを無効化してCIを緑にするだけの修正を行わない。
 
@@ -248,11 +261,13 @@ CI成功だけでアプリ全体の完成判定をしない。完成判定やリ
 ↓
 共通ルール配置
 ↓
+ビルド可能な最小AndroidプロジェクトとGradle Wrapperを用意
+↓
 GitHub Actions配置
 ↓
 GitHub Actionsを最初にPush
 ↓
-Actionsが有効であることを確認
+Actionsが起動・完了できることを確認
 ↓
 主要機能の実装開始
 ```
