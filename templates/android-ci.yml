@@ -44,7 +44,9 @@ jobs:
         if: ${{ always() }}
         run: ./gradlew testDebugUnitTest
 
-      - name: regressionCheck when available
+      # regressionCheck は毎Pushで無理なく回せる軽量回帰タスクとして定義する。
+      # 長時間の回帰・実機/エミュレータ依存テストは別タスクや手動Workflowへ分離する。
+      - name: Lightweight regressionCheck when available
         if: ${{ always() }}
         shell: bash
         run: |
