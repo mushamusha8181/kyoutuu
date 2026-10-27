@@ -102,7 +102,7 @@ Androidアプリ開発では、実装前に `docs/KENGEN.md` を確認し、必�
 
 GitHubへのPush、ブランチ作成、並行作業、デフォルトブランチへの統合では `docs/GIT_WORKFLOW.md` を確認する。複数Chat・複数AI・複数開発者が同じリポジトリを触る場合は、原則として作業単位ごとにブランチを分ける。
 
-新規Androidアプリでは、主要機能の実装より先に `docs/CI.md` を確認し、`.github/workflows/android-ci.yml` を配置してGitHubへ最初にPushし、Actionsが有効な状態を作る。
+新規Androidアプリでは、主要機能の実装より先に `docs/CI.md` を確認する。`.github/workflows/android-ci.yml` は必要に応じて配置できるが、通常PushでActionsを自動実行することは前提にしない。Workflowを置く場合も標準トリガーは `workflow_dispatch` とし、無料枠を使わない通常のGit操作・コード確認・修正・コミット・Pushを優先する。
 
 ユーザーから「Push」「Pushして」「GitHubに反映して」等の指示があっても、それだけではGitHub Actionsを実行しない。通常のPushとActions実行は分離し、Actionsの要否は `docs/CI.md` に従う。
 
