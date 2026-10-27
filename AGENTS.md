@@ -102,9 +102,9 @@ Androidアプリ開発では、実装前に `docs/KENGEN.md` を確認し、必�
 
 GitHubへのPush、ブランチ作成、並行作業、デフォルトブランチへの統合では `docs/GIT_WORKFLOW.md` を確認する。複数Chat・複数AI・複数開発者が同じリポジトリを触る場合は、原則として作業単位ごとにブランチを分ける。
 
-新規Androidアプリでは、主要機能の実装より先に `docs/CI.md` を確認し、`.github/workflows/android-ci.yml` を配置してGitHubへ最初にPushし、Actionsが有効な状態を作る。
+新規Androidアプリでは、主要機能の実装より先に `docs/CI.md` を確認する。必要に応じて `.github/workflows/android-ci.yml` を配置できるが、通常PushでActionsを自動実行することは前提にしない。Workflowを置く場合も標準トリガーは `workflow_dispatch` とし、無料枠を使わない通常のGit操作・コード確認・修正・コミット・Pushを優先する。
 
-ユーザーから「Push」「Pushして」「GitHubに反映して」等の指示があった場合のActions実行・完了確認・結果報告は `docs/CI.md` に従う。
+ユーザーから「Push」「Pushして」「GitHubに反映して」等の指示があった場合は `docs/CI.md` に従う。通常PushではActionsを自動実行せず、Push自体をActions無料枠に依存させない。
 
 完成判定は `docs/QUALITY_CHECK.md` の基本順序と判定基準に従い、ビルド成功だけで完成としない。
 
@@ -435,7 +435,7 @@ READMEは仕様の正本ではない。
 9. `README.md` の更新確認
 10. 配布版を更新する場合は `VERSIONING.md` に基づくバージョン更新の要否確認
 11. Pushまたはデフォルトブランチ統合を行う場合は `GIT_WORKFLOW.md` に基づく最新状態・競合・他作業保全の確認
-12. Pushを指示された場合は `CI.md` に基づくGitHub Actionsの実行・完了・成否確認
+12. Pushを指示された場合は `CI.md` に基づき、Actionsを自動実行せず、必要な場合のみ手動CIの要否を確認
 13. 最終差分確認
 
 検証できなかった項目は明示する。
