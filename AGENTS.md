@@ -104,7 +104,7 @@ GitHubへのPush、ブランチ作成、並行作業、デフォルトブラン�
 
 新規Androidアプリでは、主要機能の実装より先に `docs/CI.md` を確認し、`.github/workflows/android-ci.yml` を配置してGitHubへ最初にPushし、Actionsが有効な状態を作る。
 
-ユーザーから「Push」「Pushして」「GitHubに反映して」等の指示があった場合のActions実行・完了確認・結果報告は `docs/CI.md` に従う。
+ユーザーから「Push」「Pushして」「GitHubに反映して」等の指示があっても、それだけではGitHub Actionsを実行しない。通常のPushとActions実行は分離し、Actionsの要否は `docs/CI.md` に従う。
 
 完成判定は `docs/QUALITY_CHECK.md` の基本順序と判定基準に従い、ビルド成功だけで完成としない。
 
@@ -435,7 +435,7 @@ READMEは仕様の正本ではない。
 9. `README.md` の更新確認
 10. 配布版を更新する場合は `VERSIONING.md` に基づくバージョン更新の要否確認
 11. Pushまたはデフォルトブランチ統合を行う場合は `GIT_WORKFLOW.md` に基づく最新状態・競合・他作業保全の確認
-12. Pushを指示された場合は `CI.md` に基づくGitHub Actionsの実行・完了・成否確認
+12. Pushを指示された場合も、それだけではGitHub Actionsを実行しない。`CI.md` に基づき、Actionsの必要性が明確な場合だけ実行・完了・成否確認を行う
 13. 最終差分確認
 
 検証できなかった項目は明示する。
